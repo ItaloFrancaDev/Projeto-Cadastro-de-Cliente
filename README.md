@@ -35,5 +35,5 @@ Antes de executar o projeto, certifique-se de que você possui as seguintes ferr
 1. **Clone o Repositório**:
 
    ```bash
-   git clone <URL_DO_REPOSITORIO>
+   git clone (https://github.com/ItaloFrancaDev/Projeto-Cadastro-de-Cliente.git)
    cd nome-do-repositorio
