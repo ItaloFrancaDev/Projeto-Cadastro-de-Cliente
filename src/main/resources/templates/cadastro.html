@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cadastrar Cliente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link para o arquivo CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Para responsividade -->
+    <script>
+        
+        function buscarEndereco() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('estado').value = data.uf;
+                        } else {
+                            alert('CEP não encontrado!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar o CEP:', error);
+                        alert('Erro ao buscar o CEP. Tente novamente.');
+                    });
+            } else {
+                alert('CEP inválido! O CEP deve ter 8 dígitos.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.needs-validation');
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    </script>
+</head>
+<body class="container mt-4">
+    <h1 class="text-center mb-4">Cadastrar Cliente</h1>
+
+    
+    <div th:if="${emailError}" class="alert alert-danger" role="alert">
+        <span th:text="${emailError}"></span>
+    </div>
+
+    <form action="#" th:action="@{/cadastro}" th:object="${cliente}" method="post" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, preencha o nome.</div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" required
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+            <div class="invalid-feedback">Por favor, forneça um email válido.</div>
+        </div>
+        <div class="form-group">
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" th:field="*{cep}" class="form-control" onblur="buscarEndereco()" required />
+            <div class="invalid-feedback">Por favor, informe o CEP.</div>
+        </div>
+        <div class="form-group">
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" th:field="*{endereco}" class="form-control" required readonly />
+            <div class="invalid-feedback">Por favor, preencha o endereço.</div>
+        </div>
+        <div class="form-group">
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" th:field="*{bairro}" class="form-control" required readonly />
+            <div class="invalid-feedback">Por favor, preencha o bairro.</div>
+        </div>
+        <div class="form-group">
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" th:field="*{cidade}" class="form-control" required readonly />
+            <div class="invalid-feedback">Por favor, preencha a cidade.</div>
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" th:field="*{estado}" class="form-control" required readonly />
+            <div class="invalid-feedback">Por favor, preencha o estado.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Cadastrar</button>
+        <a href="/" class="btn btn-secondary">Voltar</a>
+    </form>
+</body>
+</html>
