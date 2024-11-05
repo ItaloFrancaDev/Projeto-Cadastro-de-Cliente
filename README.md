@@ -36,4 +36,4 @@ Antes de executar o projeto, certifique-se de que você possui as seguintes ferr
 
    ```bash
    git clone (https://github.com/ItaloFrancaDev/Projeto-Cadastro-de-Cliente.git)
-   cd nome-do-repositorio
+   
